@@ -1,6 +1,4 @@
-import 'package:carororo_dagga/pages/game_page.dart';
 import 'package:carororo_dagga/pages/home_page.dart';
-import 'package:carororo_dagga/pages/result_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 
