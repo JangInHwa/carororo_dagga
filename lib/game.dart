@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 
-class CaroroGame extends FlameGame with HasCollisionDetection, MouseMovementDetector, TapDetector {
+class CaroroGame extends FlameGame with HasCollisionDetection, MouseMovementDetector, TapDetector, LongPressDetector, PanDetector {
   Caroro caroro = Caroro();
 
   @override
@@ -24,6 +24,12 @@ class CaroroGame extends FlameGame with HasCollisionDetection, MouseMovementDete
     add(PlasticContainerCreator());
     // add(DirtyPlasticContainer());
     // add(CleanPlasticContainer());
+  }
+
+  @override
+  void onPanUpdate(DragUpdateInfo info) {
+    caroro.position += info.delta.game.xy;
+    super.onPanUpdate(info);
   }
 
   @override
