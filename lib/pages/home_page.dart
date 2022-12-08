@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTap: () => Get.to(GamePage()),
+        onTap: () => Get.to(() => GamePage()),
         child: Stack(
           children: [
             Positioned.fill(
