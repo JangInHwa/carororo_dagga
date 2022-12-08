@@ -1,62 +1,84 @@
+import 'dart:developer' as dev;
 import 'dart:math';
+import 'package:carororo_dagga/components/caroro.dart';
 import 'package:carororo_dagga/game.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-class DirtyPlasticContainer extends CircleComponent with HasGameRef<CaroroGame> {
-  static Vector2 initialSize = Vector2.all(140);
-  static const speed = 150;
-  DirtyPlasticContainer({super.position})
-      : super(
-          radius: initialSize.x / 2,
+class PlasticContainer extends CircleComponent with HasGameRef<CaroroGame> {
+  final Vector2 speed;
+  final String? sprite;
+  PlasticContainer({
+    required this.speed,
+    required super.radius,
+    this.sprite,
+    super.position,
+  }) : super(
           anchor: Anchor.center,
         );
 
   @override
   Future<void> onLoad() async {
     paint.color = Colors.blue;
-    add(SpriteComponent(sprite: await Sprite.load('dirty_container.png'), size: size));
+    if (sprite != null) {
+      add(SpriteComponent(sprite: await Sprite.load(sprite!), size: size));
+    }
+    add(CircleHitbox());
     return super.onLoad();
   }
 
   @override
   void update(double dt) {
-    y += dt * speed;
+    if (x - size.x / 2 <= 0 || x + size.x / 2 >= gameRef.size.x) {
+      speed.x *= -1;
+    }
+    x += dt * speed.x;
+    y += dt * speed.y;
     super.update(dt);
   }
 }
 
-class CleanPlasticContainer extends CircleComponent with HasGameRef<CaroroGame> {
-  static Vector2 initialSize = Vector2.all(140);
-  CleanPlasticContainer({super.position})
-      : super(
-          radius: initialSize.x / 2,
-          anchor: Anchor.center,
+class DirtyPlasticContainer extends PlasticContainer with CollisionCallbacks {
+  DirtyPlasticContainer({
+    super.position,
+    required super.speed,
+    required super.radius,
+  }) : super(
+          sprite: 'dirty_container.png',
         );
 
   @override
-  Future<void> onLoad() async {
-    paint.color = Colors.blue;
-    add(SpriteComponent(sprite: await Sprite.load('clean_container.png'), size: size));
-    return super.onLoad();
+  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is Caroro) {
+      gameRef.add(CleanPlasticContainer(position: position, speed: speed, radius: radius));
+      dev.log('ok');
+      removeFromParent();
+    }
+    super.onCollisionStart(intersectionPoints, other);
   }
+}
+
+class CleanPlasticContainer extends PlasticContainer {
+  CleanPlasticContainer({
+    super.position,
+    required super.speed,
+    required super.radius,
+  }) : super(
+          sprite: 'clean_container.png',
+        );
 }
 
 class PlasticContainerCreator extends TimerComponent with HasGameRef {
   final Random random = Random();
-  final _halfWidth = DirtyPlasticContainer.initialSize.x / 2;
+  final double radius = 70;
 
   PlasticContainerCreator() : super(period: 1, repeat: true);
 
   @override
   void onTick() {
-    gameRef.add(
-      DirtyPlasticContainer(
-        position: Vector2(
-          _halfWidth + (gameRef.size.x - DirtyPlasticContainer.initialSize.x) * random.nextDouble(),
-          0,
-        ),
-      ),
-    );
+    DirtyPlasticContainer newContainer = DirtyPlasticContainer(speed: Vector2(random.nextDouble() * 80 - 40, 100), radius: radius);
+    newContainer.position = Vector2(radius + (gameRef.size.x - 2 * radius) * random.nextDouble(), -radius);
+    gameRef.add(newContainer);
   }
 }

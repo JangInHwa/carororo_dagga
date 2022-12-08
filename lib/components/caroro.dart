@@ -1,4 +1,5 @@
 import 'package:carororo_dagga/game.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,7 @@ class Caroro extends CircleComponent with HasGameRef<CaroroGame> {
     );
 
     add(SpriteComponent(sprite: await Sprite.load('caroro.png'), size: size));
+    add(CircleHitbox());
     return super.onLoad();
   }
 }
