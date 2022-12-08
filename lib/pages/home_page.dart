@@ -1,15 +1,18 @@
+import 'package:carororo_dagga/controller.dart';
 import 'package:carororo_dagga/pages/game_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key}) {
+    Get.put(ScoreController());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTap: () => Get.to(() => const GamePage(), transition: Transition.noTransition),
+        onTap: () => Get.to(() => GamePage(), transition: Transition.noTransition),
         child: Stack(
           children: [
             Positioned.fill(

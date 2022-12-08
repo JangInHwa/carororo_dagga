@@ -1,9 +1,11 @@
 import 'dart:math';
 import 'package:carororo_dagga/components/caroro.dart';
+import 'package:carororo_dagga/controller.dart';
 import 'package:carororo_dagga/game.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class PlasticContainer extends CircleComponent with HasGameRef<CaroroGame> {
   final Vector2 speed;
@@ -19,7 +21,6 @@ class PlasticContainer extends CircleComponent with HasGameRef<CaroroGame> {
 
   @override
   Future<void> onLoad() async {
-    paint.color = Colors.blue;
     if (sprite != null) {
       add(SpriteComponent(sprite: await Sprite.load(sprite!), size: size));
     }
@@ -50,6 +51,10 @@ class DirtyPlasticContainer extends PlasticContainer with CollisionCallbacks {
   @override
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Caroro) {
+      Get.find<ScoreController>().score.value++;
+
+      HapticFeedback.vibrate();
+
       gameRef.add(CleanPlasticContainer(position: position, speed: speed, radius: radius));
       removeFromParent();
     }

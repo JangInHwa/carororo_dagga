@@ -10,7 +10,7 @@ void main() {
     GetMaterialApp(
       title: '카로로로 닦아!',
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: HomePage(),
       theme: ThemeData(
         fontFamily: 'Gaegu',
       ),

@@ -22,7 +22,7 @@ class DeadLine extends RectangleComponent with CollisionCallbacks, HasGameRef<Ca
       gameRef.remove(other);
     }
     if (other is DirtyPlasticContainer) {
-      Get.off(() => const ResultPage());
+      Get.off(() => const ResultPage(), transition: Transition.noTransition);
     }
     super.onCollision(intersectionPoints, other);
   }
