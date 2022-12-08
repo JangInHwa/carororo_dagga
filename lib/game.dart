@@ -1,4 +1,5 @@
 import 'package:carororo_dagga/components/caroro.dart';
+import 'package:carororo_dagga/components/deadline.dart';
 import 'package:carororo_dagga/components/plastic_container.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -22,6 +23,8 @@ class CaroroGame extends FlameGame with HasCollisionDetection, MouseMovementDete
     caroro.priority = 1;
 
     add(PlasticContainerCreator());
+
+    add(DeadLine());
     // add(DirtyPlasticContainer());
     // add(CleanPlasticContainer());
   }

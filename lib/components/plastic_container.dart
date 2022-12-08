@@ -1,4 +1,3 @@
-import 'dart:developer' as dev;
 import 'dart:math';
 import 'package:carororo_dagga/components/caroro.dart';
 import 'package:carororo_dagga/game.dart';
@@ -52,7 +51,6 @@ class DirtyPlasticContainer extends PlasticContainer with CollisionCallbacks {
   void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
     if (other is Caroro) {
       gameRef.add(CleanPlasticContainer(position: position, speed: speed, radius: radius));
-      dev.log('ok');
       removeFromParent();
     }
     super.onCollisionStart(intersectionPoints, other);

@@ -9,7 +9,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: GestureDetector(
-        onTap: () => Get.to(() => GamePage(), transition: Transition.noTransition),
+        onTap: () => Get.to(() => const GamePage(), transition: Transition.noTransition),
         child: Stack(
           children: [
             Positioned.fill(
@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('Carororo Dagga!', style: TextStyle(fontSize: 40)),
+                  const Text('Carororo Dagga!', style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
                   const Text('카로로로 닦아!', style: TextStyle(fontSize: 28)),
                   const SizedBox(height: 24),

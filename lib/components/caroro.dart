@@ -22,4 +22,14 @@ class Caroro extends CircleComponent with HasGameRef<CaroroGame> {
     add(CircleHitbox());
     return super.onLoad();
   }
+
+  @override
+  void update(double dt) {
+    if (position.x < radius) {
+      position.x = radius;
+    } else if (position.x > gameRef.size.x - radius) {
+      position.x = gameRef.size.x - radius;
+    }
+    super.update(dt);
+  }
 }
