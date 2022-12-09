@@ -1,4 +1,3 @@
-import 'dart:developer' as dev;
 import 'dart:math';
 import 'package:carororo_dagga/controller.dart';
 import 'package:carororo_dagga/game.dart';
