@@ -54,11 +54,12 @@ class DirtyPlasticContainer extends PlasticContainer with CollisionCallbacks {
   @override
   void update(double dt) {
     if (activeCollisions.contains(gameRef.caroro)) {
-      double deltaAngle = (caroroPosition1Before - caroroPosition2Before).normalized().distanceTo((gameRef.caroro.position - caroroPosition1Before).normalized());
+      double deltaAngle = (pow(5, (caroroPosition1Before - caroroPosition2Before).normalized().distanceTo((gameRef.caroro.position - caroroPosition1Before).normalized())) - 0.8);
       double caroroSpeed = gameRef.caroro.position.distanceTo(caroroPosition1Before) / dt;
-      double demange = caroroSpeed * (pow(2, deltaAngle) - 0.8);
+      double demange = caroroSpeed * deltaAngle;
       demageSum += demange;
-      if (demageSum > 100000) {
+
+      if (demageSum > 500000) {
         Get.find<ScoreController>().score.value++;
 
         HapticFeedback.vibrate();
@@ -67,6 +68,7 @@ class DirtyPlasticContainer extends PlasticContainer with CollisionCallbacks {
         removeFromParent();
       }
     }
+
     caroroPosition1Before.copyInto(caroroPosition2Before);
     gameRef.caroro.position.copyInto(caroroPosition1Before);
     super.update(dt);
@@ -91,7 +93,7 @@ class PlasticContainerCreator extends TimerComponent with HasGameRef {
 
   @override
   void onTick() {
-    DirtyPlasticContainer newContainer = DirtyPlasticContainer(speed: Vector2(random.nextDouble() * 80 - 40, 100), radius: radius);
+    DirtyPlasticContainer newContainer = DirtyPlasticContainer(speed: Vector2(random.nextDouble() * 80 - 40, 60), radius: radius);
     newContainer.position = Vector2(radius + (gameRef.size.x - 2 * radius) * random.nextDouble(), -radius);
     gameRef.add(newContainer);
   }
