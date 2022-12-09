@@ -1,7 +1,6 @@
 import 'package:carororo_dagga/components/caroro.dart';
 import 'package:carororo_dagga/components/deadline.dart';
 import 'package:carororo_dagga/components/plastic_container.dart';
-import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flutter/material.dart';
@@ -14,15 +13,6 @@ class CaroroGame extends FlameGame with HasCollisionDetection, MouseMovementDete
 
   @override
   Future<void>? onLoad() async {
-    // final sprite = await loadSprite('background.jpg');
-    // add(
-    //   SpriteComponent(
-    //     sprite: sprite,
-    //     position: size / 2,
-    //     size: size,
-    //     anchor: Anchor.center,
-    //   ),
-    // );
     add(caroro);
     caroro.priority = 1;
 
@@ -31,6 +21,11 @@ class CaroroGame extends FlameGame with HasCollisionDetection, MouseMovementDete
     add(DeadLine());
     // add(DirtyPlasticContainer());
     // add(CleanPlasticContainer());
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
   }
 
   @override

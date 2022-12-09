@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:carororo_dagga/components/caroro.dart';
 import 'package:carororo_dagga/controller.dart';
 import 'package:carororo_dagga/game.dart';
 import 'package:flame/collisions.dart';
@@ -24,7 +23,7 @@ class PlasticContainer extends CircleComponent with HasGameRef<CaroroGame> {
     if (sprite != null) {
       add(SpriteComponent(sprite: await Sprite.load(sprite!), size: size));
     }
-    add(CircleHitbox());
+    add(CircleHitbox(isSolid: true));
     return super.onLoad();
   }
 
@@ -33,13 +32,16 @@ class PlasticContainer extends CircleComponent with HasGameRef<CaroroGame> {
     if (x - size.x / 2 <= 0 || x + size.x / 2 >= gameRef.size.x) {
       speed.x *= -1;
     }
-    x += dt * speed.x;
-    y += dt * speed.y;
+    position += speed.scaled(dt);
     super.update(dt);
   }
 }
 
 class DirtyPlasticContainer extends PlasticContainer with CollisionCallbacks {
+  Vector2 caroroPosition1Before = Vector2(0, 0);
+  Vector2 caroroPosition2Before = Vector2(0, 0);
+  double demageSum = 0;
+
   DirtyPlasticContainer({
     super.position,
     required super.speed,
@@ -49,16 +51,25 @@ class DirtyPlasticContainer extends PlasticContainer with CollisionCallbacks {
         );
 
   @override
-  void onCollisionStart(Set<Vector2> intersectionPoints, PositionComponent other) {
-    if (other is Caroro) {
-      Get.find<ScoreController>().score.value++;
+  void update(double dt) {
+    if (activeCollisions.contains(gameRef.caroro)) {
+      double deltaAngle = (caroroPosition1Before - caroroPosition2Before).normalized().distanceTo((gameRef.caroro.position - caroroPosition1Before).normalized());
+      double caroroSpeed = gameRef.caroro.position.distanceTo(caroroPosition1Before) / dt;
+      double demange = caroroSpeed * deltaAngle;
+      demageSum += demange;
 
-      HapticFeedback.vibrate();
+      if (demageSum > 50000) {
+        Get.find<ScoreController>().score.value++;
 
-      gameRef.add(CleanPlasticContainer(position: position, speed: speed, radius: radius));
-      removeFromParent();
+        HapticFeedback.vibrate();
+
+        gameRef.add(CleanPlasticContainer(position: position, speed: speed, radius: radius));
+        removeFromParent();
+      }
     }
-    super.onCollisionStart(intersectionPoints, other);
+    caroroPosition1Before.copyInto(caroroPosition2Before);
+    gameRef.caroro.position.copyInto(caroroPosition1Before);
+    super.update(dt);
   }
 }
 
@@ -76,7 +87,7 @@ class PlasticContainerCreator extends TimerComponent with HasGameRef {
   final Random random = Random();
   final double radius = 70;
 
-  PlasticContainerCreator() : super(period: 1, repeat: true);
+  PlasticContainerCreator() : super(period: 3, repeat: true);
 
   @override
   void onTick() {

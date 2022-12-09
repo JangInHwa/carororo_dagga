@@ -18,6 +18,7 @@ class Caroro extends CircleComponent with HasGameRef<CaroroGame> {
 
     add(SpriteComponent(sprite: await Sprite.load('caroro.png'), size: size));
     add(CircleHitbox());
+    Vector2(1, 1);
     return super.onLoad();
   }
 
