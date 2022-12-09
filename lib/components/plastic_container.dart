@@ -1,3 +1,4 @@
+import 'dart:developer' as dev;
 import 'dart:math';
 import 'package:carororo_dagga/controller.dart';
 import 'package:carororo_dagga/game.dart';
@@ -55,10 +56,9 @@ class DirtyPlasticContainer extends PlasticContainer with CollisionCallbacks {
     if (activeCollisions.contains(gameRef.caroro)) {
       double deltaAngle = (caroroPosition1Before - caroroPosition2Before).normalized().distanceTo((gameRef.caroro.position - caroroPosition1Before).normalized());
       double caroroSpeed = gameRef.caroro.position.distanceTo(caroroPosition1Before) / dt;
-      double demange = caroroSpeed * deltaAngle;
+      double demange = caroroSpeed * (pow(2, deltaAngle) - 0.8);
       demageSum += demange;
-
-      if (demageSum > 50000) {
+      if (demageSum > 100000) {
         Get.find<ScoreController>().score.value++;
 
         HapticFeedback.vibrate();
