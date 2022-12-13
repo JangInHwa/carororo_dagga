@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class PlasticContainer extends CircleComponent with HasGameRef<CaroroGame> {
-  final Vector2 speed;
+  double speed;
   final String? sprite;
   PlasticContainer({
     required this.speed,
@@ -30,9 +30,9 @@ class PlasticContainer extends CircleComponent with HasGameRef<CaroroGame> {
   @override
   void update(double dt) {
     if (x - size.x / 2 <= 0 || x + size.x / 2 >= gameRef.size.x) {
-      speed.x *= -1;
+      speed *= -1;
     }
-    position += speed.scaled(dt);
+    position += Vector2(speed, gameRef.fallSpeed).scaled(dt);
     super.update(dt);
   }
 }
@@ -92,7 +92,7 @@ class PlasticContainerCreator extends TimerComponent with HasGameRef {
 
   @override
   void onTick() {
-    DirtyPlasticContainer newContainer = DirtyPlasticContainer(speed: Vector2(random.nextDouble() * 80 - 40, 60), radius: radius);
+    DirtyPlasticContainer newContainer = DirtyPlasticContainer(speed: random.nextDouble() * 80 - 40, radius: radius);
     newContainer.position = Vector2(radius + (gameRef.size.x - 2 * radius) * random.nextDouble(), -radius);
     gameRef.add(newContainer);
   }
